@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.SpinnerValueFactory?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CurrencyConverterController">
+   <children>
+      <ChoiceBox fx:id="fromCurrency" layoutX="216.0" layoutY="64.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="toCurrency" layoutX="216.0" layoutY="96.0" prefWidth="150.0" />
+      <Spinner fx:id="amountSpinner" layoutX="217.0" layoutY="132.0" prefWidth="150.0">
+         <valueFactory>
+            <SpinnerValueFactory.DoubleSpinnerValueFactory amountToStepBy="1.0" initialValue="1.0" max="1.7976931348623157E308" min="0.0" />
+         </valueFactory>
+      </Spinner>
+      <Label fx:id="resultLabel" layoutX="217.0" layoutY="167.0" text="შედეგი გამოჩნდება აქ" />
+   </children>
+</AnchorPane>
