@@ -6,56 +6,58 @@ import javafx.scene.control.Label
 import javafx.scene.control.Spinner
 import javafx.scene.control.SpinnerValueFactory
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory
+import java.text.DecimalFormat
 
 class CurrencyConverterController {
     @FXML
-    private val fromCurrency: ChoiceBox<String?>? = null
+    private val fromCurrency: ChoiceBox<String>? = null
 
     @FXML
-    private val toCurrency: ChoiceBox<String?>? = null
+    private val toCurrency: ChoiceBox<String>? = null
 
     @FXML
-    private val amountSpinner: Spinner<Double?>? = null
+    private val amountSpinner: Spinner<Double>? = null
 
     @FXML
     private val resultLabel: Label? = null
 
-    private val exchangeRates: MutableMap<String?, Double> = HashMap()
+    private val exchangeRates: MutableMap<String, Double> = HashMap()
+    private val decimalFormat = DecimalFormat("#.##")
 
     fun initialize() {
-        exchangeRates.put("GEL", 1.0)
-        exchangeRates.put("USD", 2.70)
-        exchangeRates.put("GBP", 3.30)
-        exchangeRates.put("EUR", 2.90)
+
+        exchangeRates["GEL"] = 1.0
+        exchangeRates["USD"] = 2.70
+        exchangeRates["GBP"] = 3.30
+        exchangeRates["EUR"] = 2.90
 
 
-        fromCurrency!!.setItems(FXCollections.observableArrayList(exchangeRates.keys))
-        toCurrency!!.setItems(FXCollections.observableArrayList(exchangeRates.keys))
+        fromCurrency!!.items = FXCollections.observableArrayList(exchangeRates.keys)
+        toCurrency!!.items = FXCollections.observableArrayList(exchangeRates.keys)
 
 
-        fromCurrency.setValue("GEL")
-        toCurrency.setValue("USD")
+        fromCurrency.value = "GEL"
+        toCurrency.value = "USD"
 
 
-        val valueFactory: SpinnerValueFactory<Double?> = DoubleSpinnerValueFactory(0.0, MAX_VALUE, 1.0)
-        amountSpinner!!.setValueFactory(valueFactory)
+        val valueFactory: SpinnerValueFactory<Double> = DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, 1.0)
+        amountSpinner!!.valueFactory = valueFactory
+        amountSpinner.isEditable = true
 
 
         amountSpinner.valueProperty()
-            .addListener { observable: ObservableValue<out Double?>?, oldValue: Double?, newValue: Double? ->
-                convertCurrency()
-            }
+            .addListener { observable: ObservableValue<out Double>?, oldValue: Double?, newValue: Double? -> convertCurrency() }
 
 
         fromCurrency.valueProperty()
-            .addListener { observable: ObservableValue<out String?>?, oldValue: String?, newValue: String? ->
-                convertCurrency()
-            }
-
+            .addListener { observable: ObservableValue<out String>?, oldValue: String?, newValue: String? -> convertCurrency() }
         toCurrency.valueProperty()
-            .addListener { observable: ObservableValue<out String?>?, oldValue: String?, newValue: String? ->
-                convertCurrency()
-            }
+            .addListener { observable: ObservableValue<out String>?, oldValue: String?, newValue: String? -> convertCurrency() }
+
+
+
+
+
     }
 
     private fun convertCurrency() {
@@ -69,7 +71,13 @@ class CurrencyConverterController {
                 val fromRate = exchangeRates[from]!!
                 val toRate = exchangeRates[to]!!
                 val result = (amount / fromRate) * toRate
-                resultLabel!!.text = String.format("%.2f %s არის %.2f %s", amount, from, result, to)
+                resultLabel!!.text = String.format(
+                    "%s %s არის %s %s",
+                    decimalFormat.format(amount),
+                    from,
+                    decimalFormat.format(result),
+                    to
+                )
             } else {
                 resultLabel!!.text = "არასწორი ვალუტაა არჩეული!"
             }
